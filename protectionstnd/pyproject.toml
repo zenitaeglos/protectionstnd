@@ -18,5 +18,5 @@ features = ["pyo3/extension-module"]
 author = "Alejandro Martinez"
 author_email = "aegloszenit@protonmail.com"
 description = "Security Protections, from sql injection to country specific protections"
-url = "https://github.com/"
+url = "https://github.com/zenitaeglos/protectionstnd.git"
 license = "MIT"
