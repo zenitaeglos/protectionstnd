@@ -1,6 +1,6 @@
 [package]
 name = "protectionstnd"
-version = "0.1.3"
+version = "0.2.1"
 edition = "2021"
 authors = ["Alejandro Martinez <aegloszenit@protonmail.com>"]
 description = "Security Protections, from sql injection to country specific protections"
