@@ -2,7 +2,9 @@
 
 use pyo3::prelude::*;
 use pyo3::types::{PyString};
+use pyo3::create_exception;
 
+create_exception!(cl, ValidationError, pyo3::exceptions::PyException);
 
 fn digit_calculation(total: i32) -> String {
     let remainder = total % 11;
@@ -27,14 +29,25 @@ fn digit_calculation(total: i32) -> String {
 ///     bool: Validation of rut/run
 ///
 #[pyfunction]
-pub fn rut_run_checker(rut_run: &Bound<'_, PyString>) -> bool {
+pub fn rut_run_checker(rut_run: &Bound<'_, PyString>) -> PyResult<bool> {
 
     let binding = rut_run.to_string();
     let element: Vec<&str> = binding.split("-").collect();
 
-    if element[0].len() < 2 {
-        return false;
+    if element.len() < 2 {
+        return Err(ValidationError::new_err("bad format"))
     }
+
+    if element[0].len() < 2 {
+        return Err(ValidationError::new_err("minimal length is 2"))
+    }
+
+    let _int_number: i32 = match element[0].parse() {
+        Ok(num) => num,
+        Err(_) => {
+            return Err(ValidationError::new_err("Digit is invalid"))
+        }
+    };
 
     let mut total: i32 = 0;
     let mut factor: i32 = 2;
@@ -52,9 +65,9 @@ pub fn rut_run_checker(rut_run: &Bound<'_, PyString>) -> bool {
     let calculated_digit = digit_calculation(total);
 
     if calculated_digit == element[1] {
-        return true
+        return Ok(true)
     }
-    false
+    Ok(false)
 }
 
 #[cfg(test)]

@@ -10,7 +10,8 @@ mod rutrun;
 /// 
 /// Chilenian specific security protection options like rut/run
 #[pymodule]
-pub fn cl(m: &Bound<'_, PyModule>) -> PyResult<()> {
+pub fn cl(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(rutrun::rut_run_checker, m)?)?;
+    m.add("ValidationError", py.get_type::<rutrun::ValidationError>())?;
     Ok(())
 }
