@@ -80,7 +80,12 @@ mod tests {
         Python::with_gil(|py| {
             let valid_rutrun = PyString::new(py, "17945265-0");
             let result = rut_run_checker(&valid_rutrun);
-            assert_eq!(result, true);
+            match result {
+                Ok(val) => assert_eq!(val, true),
+                Err(e) => {
+                    assert_eq!(e.value(py).to_string(), "minimal length is 2")
+                }
+            }
         });
     }
 
@@ -90,7 +95,12 @@ mod tests {
         Python::with_gil(|py| {
             let key = PyString::new(py, "");
             let result = rut_run_checker(&key);
-            assert_eq!(result, false);
+            match result {
+                Ok(val) => assert_eq!(val, false),
+                Err(e) => {
+                    assert_eq!(e.value(py).to_string(), "bad format")
+                }
+            }
         });
     }
 }
